@@ -1,0 +1,1 @@
+<% response.sendRedirect("/activity/list?page=1");%>
