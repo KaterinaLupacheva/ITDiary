@@ -47,14 +47,15 @@
     <!--</bean>-->
 
     <!--Heroku Postgres -->
-    <bean class="java.net.URI" id="dbUrl">
-        <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
-    </bean>
+    <!--<bean class="java.net.URI" id="dbUrl">-->
+        <!--<constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>-->
+    <!--</bean>-->
 
-    <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?sslmode=require' }"/>
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
-        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+    <bean id="myDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://ec2-54-228-212-134.eu-west-1.compute.amazonaws.com:5432/dc7umh5t691mo1?sslmode=require"/>
+        <property name="username" value="ejebigygeolgom"/>
+        <property name="password" value="cbd44bc4464e3d92fff2daa2be66788a53b42e228fa33c92baf1786c20eeb979"/>
     </bean>
 
     <!-- Step 2: Setup Hibernate session factory -->
@@ -64,7 +65,8 @@
         <property name="packagesToScan" value="by.mycompany.diary.entity"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
+                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>-->
                 <prop key="hibernate.show_sql">true</prop>
             </props>
         </property>
