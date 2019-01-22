@@ -32,18 +32,29 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <!-- Step 1: Define Database DataSource / connection pool -->
-    <bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-          destroy-method="close">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/itdiary?useSSL=false&amp;serverTimezone=UTC"/>
-        <property name="user" value="root"/>
-        <property name="password" value="root"/>
+    <!--&lt;!&ndash; Step 1: Define Database DataSource / connection pool &ndash;&gt;-->
+    <!--<bean id="myDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"-->
+          <!--destroy-method="close">-->
+        <!--<property name="driverClass" value="com.mysql.jdbc.Driver"/>-->
+        <!--<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/itdiary?useSSL=false&amp;serverTimezone=UTC"/>-->
+        <!--<property name="user" value="root"/>-->
+        <!--<property name="password" value="root"/>-->
 
-        <!-- these are connection pool properties for C3P0 -->
-        <property name="minPoolSize" value="5"/>
-        <property name="maxPoolSize" value="20"/>
-        <property name="maxIdleTime" value="30000"/>
+        <!--&lt;!&ndash; these are connection pool properties for C3P0 &ndash;&gt;-->
+        <!--<property name="minPoolSize" value="5"/>-->
+        <!--<property name="maxPoolSize" value="20"/>-->
+        <!--<property name="maxIdleTime" value="30000"/>-->
+    <!--</bean>-->
+
+    <!--Heroku Postgres -->
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
+    </bean>
+
+    <bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?sslmode=require' }"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
     </bean>
 
     <!-- Step 2: Setup Hibernate session factory -->
@@ -69,5 +80,5 @@
     <tx:annotation-driven transaction-manager="myTransactionManager"/>
 
     <!-- Add support for reading web resources: css, images, js, etc ... -->
-    <mvc:resources location="/res/" mapping="/res/**"></mvc:resources>
+    <mvc:resources location="/res/" mapping="/res/**"/>
 </beans>
