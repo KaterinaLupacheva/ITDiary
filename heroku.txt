@@ -1,0 +1,3 @@
+to deploy app in heroku write in command line
+
+heroku war:deploy C:\Users\kater\Documents\IdeaProjects\ItDiaryNew\target\diary.war --app itdiary
