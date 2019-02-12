@@ -7,4 +7,6 @@ Project Beauty Salon
 Codeacademy
 Asoba
 Naakcii.by
+WeekMenu.by
+Vaadin
 Other
